@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html xmlns:th ="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Thymeleaf Sample</title>
+</head>
+<body>
+  <h1 th:text="'hello world'">표시되는 부분</h1>
+  <h1>즐거운 오후입니다! [[${name}]]</h1>
+  <h1 th:text="'내일은, ' + '맑은' + '날씨입니다.'">표시되는 부분</h1>
+
+  <hr>
+  <h1 th:text="|안녕하세요! ${name}씨|">표시되는 부분</h1>
+  <div th:with="a=1,b=2">
+    <span th:text="|${a} + ${b} = ${a+b}|"></span>
+  </div>
+
+  <span th:text="1 > 10"></span>
+  <span th:text="1 < 10"></span>
+  <span th:text="1 >= 10"></span>
+  <span th:text="1 <= 10"></span>
+  <span th:text="1 == 10"></span>
+  <span th:text="1 != 10"></span>
+  <span th:text="Taro == Taro"></span>
+  <span th:text="Taro != Taro"></span>
+
+  <hr>
+  <p th:text="${name} == 'Taro'?'Taro씨 입니다.':'Taro씨가 아닙니다.'"></p>
+  <div th:if="${name} == 'Taro'">
+    <p>Taro씨 입니다!</p>
+  </div>
+  <div th:unless="${name}=='Hanako'">
+    <p>Hanako씨가 아닙니다.</p>
+  </div>
+
+  <hr>
+  <div th:switch="${name}">
+    <p th:case="Taro" th:text="|${name}입니다!|"></p>
+    <p th:case="Shiro" th:text="|${name}입니다!|"></p>
+    <p th:case="Hanako" th:text="|${name}입니다!|"></p>
+    <p th:case="*">리스트에 없습니다.</p>
+  </div>
+
+  .으로 액세스 : <span th:text="${mb.id}">ID</span>-<span th:text="${mb.name}">이름</span><br>
+  []으로 액세스 : <span th:text="${mb['id']}">ID</span>-<span th:text="${mb['name']}">이름</span><br>
+  <th:block th:object="${mb}">
+    .으로 액세스 : <span th:text="*{id}">ID</span>-<span th:text="*{name}">이름</span><br>
+    []으로 액세스 : <span th:text="*{['id']}">ID</span>-<span th:text="*{['name']}">이름</span><br>
+  </th:block>
+
+  <hr>
+  <span th:text="${list[0]}">방각</span>
+  <span th:text="${list[1]}">방각</span>
+  <span th:text="${list[2]}">방각</span>
+  <span th:text="${list[3]}">방각</span><br>
+
+  .으로 액세스 : <span th:text="${map.Tanaka.name}">이름1</span>
+  <span th:text="${map.Suzuki.name}">이름2</span><br>
+  []으로 액세스 : <span th:text="${map['Tanaka']['name']}">이름1  : []으로 액세스</span>
+  <span th:text="${map['Suzuki']['name']}">이름2  : []으로 액세스</span>
+
+  <div th:each="member : ${members}">
+    <p>[[${member.id}]] : [[${member.name}]]</p>
+  </div>
+
+
+
+  <hr>
+  <div th:each="member, s : ${members}" th:object="${member}">
+    <p>
+      index-> [[${s.index}]],count->[[${s.count}]],
+      size-> [[${s.size}]],current->[[${s.current}]],
+      even-> [[${s.even}]],odd->[[${s.odd}]],
+      first-> [[${s.first}]],last->[[${s.last}]],
+      [[*{id}]]:[[*{name}]]
+    </p>
+  </div>
+
+  <div th:with="x=1000000, y=123456.789">
+    정수포맷 :<span th:text ="${#numbers.formatInteger(x, 3, 'COMMA')}"></span ><br/>
+    부동소수점 포맷 :<span th:text="${#numbers.formatDecimal(y, 3, 'COMMA', 2, 'POINT')}"></span>
+  </div>
+  <br/>
+  <div th:with="today=${#dates.createNow()}">
+    yyyy/mm/dd 형식 :<span th:text="${#dates.format(today,'yyyy/MM/dd')}"></span><br/>
+    yyyy년mm월dd일 형식 :<span th:text="${#dates.format(today,'yyyy년MM월dd일')}"></span><br/>
+    yyyy년 :<span th:text="${#dates.year(today)}"></span><br/>
+    MM월 :<span th:text="${#dates.month(today)}"></span><br/>
+    dd일 :<span th:text="${#dates.day(today)}"></span><br/>
+    요일 :<span th:text="${#dates.dayOfWeek(today)}"></span><br/>
+  </div>
+  <br/>
+  <div th:with="str1='abcdef'">
+    대문자변환 :<span th:text="${#strings.toUpperCase(str1)}"></span><br/>
+    빈글자판정 :<span th:text="${#strings.isEmpty(str1)}"></span><br/>
+    길이 :<span th:text="${#strings.length(str1)}"></span><br/>
+  </div>
+
+
+
+  <h1>Fragment를 여기 밑에 삽입</h1>
+  <div id="one" th:insert="fragment::one"></div>
+  <div id="three" th:replace="fragment::three"></div>
+</body>
+</html>
